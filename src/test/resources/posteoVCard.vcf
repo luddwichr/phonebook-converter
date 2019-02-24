@@ -1,0 +1,19 @@
+BEGIN:VCARD
+VERSION:3.0
+N:;;;;
+FN:
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:Family Name;Given Name;;;
+FN:Display Name
+EMAIL;TYPE=home:1@email.com
+EMAIL;TYPE=work:2@email.com
+TEL;TYPE=work:+123456789
+TEL;TYPE=home:+987654321
+TEL;TYPE=cell:+123454321
+ADR;TYPE=home:;;Streetname 123;Testtown;;12345;Testcountry
+ADR;TYPE=work:;;Busystreet 1a;Testtown B;;0987;Testcountry B
+ORG:Test Ltd.
+BDAY:1999-12-31
+END:VCARD
