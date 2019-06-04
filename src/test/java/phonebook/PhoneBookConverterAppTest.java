@@ -1,9 +1,8 @@
 package phonebook;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.ExpectedSystemExit;
-import org.junit.rules.TemporaryFolder;
+import com.ginsberg.junit.exit.ExpectSystemExitWithStatus;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -14,19 +13,14 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class PhoneBookConverterAppTest {
-
-	@Rule
-	public final TemporaryFolder folder = new TemporaryFolder();
-
-	@Rule
-	public final ExpectedSystemExit exit = ExpectedSystemExit.none();
+class PhoneBookConverterAppTest {
 
 	@Test
-	public void convertCsvToVCard() throws IOException {
+	void convertCsvToVCard(@TempDir Path tempDir) throws IOException {
 		Path source = Paths.get(TestData.CSV_ADDRESS_BOOK_FILE);
-		Path destination = folder.newFile("test.vcf").toPath();
+		Path destination = tempDir.resolve("test.vcf");
 
 		String[] parameters = {"CsvToVCard", source.toString(), destination.toString()};
 
@@ -38,9 +32,9 @@ public class PhoneBookConverterAppTest {
 	}
 
 	@Test
-	public void convertVCardToCsv() throws IOException {
+	void convertVCardToCsv(@TempDir Path tempDir) throws IOException {
 		Path source = Paths.get(TestData.POSTEO_V_CARD_FILE);
-		Path destination = folder.newFile("test.csv").toPath();
+		Path destination = tempDir.resolve("test.csv");
 
 		String[] parameters = {"VCardToCsv", source.toString(), destination.toString()};
 
@@ -51,22 +45,23 @@ public class PhoneBookConverterAppTest {
 		assertThat(actual).isEqualTo(expected);
 	}
 
-	@Test(expected = UncheckedIOException.class)
-	public void nonExistentSourceFile() {
+	@Test
+	void nonExistentSourceFile() {
 		String[] parameters = {"VCardToCsv", "", ""};
-		PhoneBookConverterApp.main(parameters);
+		assertThatThrownBy(() -> PhoneBookConverterApp.main(parameters))
+				.isInstanceOf(UncheckedIOException.class);
 	}
 
 	@Test
-	public void insufficientParameters() {
-		exit.expectSystemExitWithStatus(-1);
+	@ExpectSystemExitWithStatus(-1)
+	void insufficientParameters() {
 		String[] parameters = {};
 		PhoneBookConverterApp.main(parameters);
 	}
 
 	@Test
-	public void illegalModeParameters() {
-		exit.expectSystemExitWithStatus(-1);
+	@ExpectSystemExitWithStatus(-1)
+	void illegalModeParameters() {
 		String[] parameters = {"unknownMode", "", ""};
 		PhoneBookConverterApp.main(parameters);
 	}

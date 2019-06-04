@@ -1,9 +1,8 @@
 package phonebook.writer;
 
 import ezvcard.VCard;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import phonebook.TestData;
 
 import java.io.IOException;
@@ -15,21 +14,17 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ThunderbirdCsvWriterTest {
-
-	@Rule
-	public final TemporaryFolder folder = new TemporaryFolder();
+class ThunderbirdCsvWriterTest {
 
 	@Test
-	public void writeToFile() throws IOException {
+	void writeToFile(@TempDir Path tempDir) throws IOException {
 		ThunderbirdCsvWriter writer = new ThunderbirdCsvWriter();
-		Path destination = folder.newFile("test.csv").toPath();
+		Path destination = tempDir.resolve("test.csv");
+		List<String> expectedFileContent = Files.readAllLines(Paths.get(TestData.CSV_ADDRESS_BOOK_FILE));
 		List<VCard> contacts = Arrays.asList(TestData.minimumContact(), TestData.fullContact());
 
 		writer.writeToFile(destination, contacts);
 
-		List<String> expected = Files.readAllLines(Paths.get(TestData.CSV_ADDRESS_BOOK_FILE));
-		List<String> actual = Files.readAllLines(destination);
-		assertThat(actual).isEqualTo(expected);
+		assertThat(Files.readAllLines(destination)).isEqualTo(expectedFileContent);
 	}
 }

@@ -1,7 +1,7 @@
 package phonebook.converter;
 
 import ezvcard.VCard;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import phonebook.reader.PhoneBookReader;
 import phonebook.writer.PhoneBookWriter;
 
@@ -12,10 +12,10 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-public class PhoneBookConverterTest {
+class PhoneBookConverterTest {
 
 	@Test
-	public void convert() throws IOException {
+	void convert() throws IOException {
 		PhoneBookReader reader = mock(PhoneBookReader.class);
 		PhoneBookWriter writer = mock(PhoneBookWriter.class);
 		Path source = mock(Path.class);
