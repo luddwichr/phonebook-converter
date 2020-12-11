@@ -103,7 +103,7 @@ public class ThunderbirdCsvReader implements PhoneBookReader {
 
 	private void addBirthdayIfSet(VCard contact, String year, String month, String day) {
 		if (!year.isEmpty() && !month.isEmpty() && !day.isEmpty()) {
-			LocalDate localDate = LocalDate.of(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day));
+			LocalDate localDate = LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
 			Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			Birthday birthday = new Birthday(date);
 			contact.setBirthday(birthday);
